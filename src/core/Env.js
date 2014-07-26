@@ -225,9 +225,19 @@ getJasmineRequireObj().Env = function(j$) {
     };
 
     this.describe = function(description, specDefinitions) {
-      var suite = suiteFactory(description);
+      var suite;
+      var parentSuite;
+      if(description instanceof Array){
+        suite = suiteFactory(description[0]);
+        parentSuite = currentSuite;
+        parentSuite.addChild(suite);
+        currentSuite = suite;
+        suite = suiteFactory(description[1]);
+      }else{
+        suite = suiteFactory(description);
+      }
 
-      var parentSuite = currentSuite;
+      parentSuite = currentSuite;
       parentSuite.addChild(suite);
       currentSuite = suite;
 
